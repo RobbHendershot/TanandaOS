@@ -1,9 +1,11 @@
 sudo livecd-creator \
---config=./tananda-live-desktop.ks \
+--config=./tananda-live-workstation.ks \
 --fslabel=Tananda-x86_64-`date +%F` \
---releasever=20 \
+--releasever=21 \
 --title=Tananda-x86_64-`date +%F` \
 --product=Tananda-x86_64-`date +%F` \
 --cache=/home/tananda/cache/ \
 --tmpdir=/home/tananda/tmp/ \
---verbos 
+--verbos \
+# --efi
+

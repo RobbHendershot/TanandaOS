@@ -1,6 +1,6 @@
-# tananda-live-base.ks
+# fedora-live-base.ks
 #
-# Defines the basics for all kickstarts in the tananda-live branch
+# Defines the basics for all kickstarts in the fedora-live branch
 # Does not include package selection (other then mandatory)
 # Does not include localization packages or configuration
 #
@@ -11,80 +11,26 @@ lang en_US.UTF-8
 keyboard us
 timezone US/Mountain
 auth --useshadow --enablemd5
-selinux --enforcing
+selinux --permissive
 firewall --enabled --service=mdns
 xconfig --startxonboot
-
-clearpart --all --drives=sda --initlabel 
-#autopart --type=btrfs
-
-# To build live cd size must be bigger than install and
-# do not specify filesystem type.
-part / --size=20000 --type=btrfs
-
-# Partition scheme I would like to eventually use
-#part /boot --fstype ext3 --size=1500 --asprimary
-#part pv.00 --size=1 --grow --asprimary
-
-#volgroup vgroot pv.00
-#logvol / --name=root.fs --vgname=vgroot --size=20000 
-#logvol swap --name=swap.vol --vgname=vgroot --recommended
-
-
+part / --size 8000 --fstype ext4
 services --enabled=NetworkManager --disabled=network,sshd
 
 %include tananda-repo.ks
 
 %packages
-# these make up the "basic-desktop-environment" but I cannot get that to load when compiling the spin.
 @base-x
-@basic-desktop
-@core
-@dial-up
-@fonts
 @guest-desktop-agents
-@hardware-support
-@multimedia
 @standard
+@core
+@fedora-release-nonproduct
+@fonts
 @input-methods
-
+@dial-up
+@multimedia
+@hardware-support
 @printing
-
-byobu
-syslog
-
-# grub-efi and grub2 and efibootmgr so anaconda can use the right one on  install. 
-grub2-efi
-grub2
-efibootmgr
-
-
-# Rebranding
--fedora-logos
--fedora-release
--fedora-release-notes
-generic-release
-generic-logos
-generic-release-notes
-
-# Lose the firmware
-iwl100-firmware
-iwl1000-firmware
-iwl105-firmware
-iwl135-firmware
-iwl2000-firmware
-iwl2030-firmware
-iwl3160-firmware
-iwl3945-firmware
-iwl4965-firmware
-iwl5000-firmware
-iwl5150-firmware
-iwl6000-firmware
-iwl6000g2a-firmware
-iwl6000g2b-firmware
-iwl6050-firmware
-iwl7260-firmware
- 
 
 # Explicitly specified here:
 # <notting> walters: because otherwise dependency loops cause yum issues.
@@ -98,6 +44,9 @@ memtest86+
 # The point of a live image is to install
 anaconda
 @anaconda-tools
+
+# Need aajohan-comfortaa-fonts for the SVG rnotes images
+aajohan-comfortaa-fonts
 
 %end
 
@@ -128,9 +77,6 @@ exists() {
     which \$1 >/dev/null 2>&1 || return
     \$*
 }
-
-# Make sure we don't mangle the hardware clock on shutdown
-ln -sf /dev/null /etc/systemd/system/hwclock-save.service
 
 livedir="LiveOS"
 for arg in \`cat /proc/cmdline\` ; do
@@ -211,12 +157,6 @@ if ! strstr "\`cat /proc/cmdline\`" nopersistenthome && [ -n "\$homedev" ] ; the
   action "Mounting persistent /home" mountPersistentHome
 fi
 
-# make it so that we don't do writing to the overlay for things which
-# are just tmpdirs/caches
-mount -t tmpfs -o mode=0755 varcacheyum /var/cache/yum
-mount -t tmpfs vartmp /var/tmp
-[ -x /sbin/restorecon ] && /sbin/restorecon /var/cache/yum /var/tmp >/dev/null 2>&1
-
 if [ -n "\$configdone" ]; then
   exit 0
 fi
@@ -245,7 +185,7 @@ systemctl stop mdmonitor.service 2> /dev/null || :
 systemctl stop mdmonitor-takeover.service 2> /dev/null || :
 
 # don't enable the gnome-settings-daemon packagekit plugin
-gsettings set org.gnome.settings-daemon.plugins.updates active 'false' || :
+gsettings set org.gnome.software download-updates 'false' || :
 
 # don't start cron/at as they tend to spawn things which are
 # disk intensive that are painful on a live image
@@ -330,9 +270,17 @@ chmod 755 /etc/rc.d/init.d/livesys-late
 # enable tmpfs for /tmp
 systemctl enable tmp.mount
 
+# make it so that we don't do writing to the overlay for things which
+# are just tmpdirs/caches
+# note https://bugzilla.redhat.com/show_bug.cgi?id=1135475
+cat >> /etc/fstab << EOF
+vartmp   /var/tmp    tmpfs   defaults   0  0
+varcacheyum /var/cache/yum  tmpfs   mode=0755,context=system_u:object_r:rpm_var_cache_t:s0   0   0
+EOF
+
 # work around for poor key import UI in PackageKit
 rm -f /var/lib/rpm/__db*
-releasever=$(rpm -q --qf '%{version}\n' fedora-release)
+releasever=$(rpm -q --qf '%{version}\n' --whatprovides system-release)
 basearch=$(uname -i)
 rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-$releasever-$basearch
 echo "Packages within this LiveCD"
@@ -351,15 +299,25 @@ rm -f /core*
 # convince readahead not to collect
 # FIXME: for systemd
 
+# forcibly regenerate fontconfig cache (so long as this live image has
+# fontconfig) - see #1169979
+if [ -x /usr/bin/fc-cache ] ; then
+   fc-cache -f
+fi
+
 %end
 
 
 %post --nochroot
-cp $INSTALL_ROOT/usr/share/doc/*-release/GPL $LIVE_ROOT/GPL
+cp $INSTALL_ROOT/usr/share/licenses/*-release/* $LIVE_ROOT/
 
 # only works on x86, x86_64
 if [ "$(uname -i)" = "i386" -o "$(uname -i)" = "x86_64" ]; then
   if [ ! -d $LIVE_ROOT/LiveOS ]; then mkdir -p $LIVE_ROOT/LiveOS ; fi
   cp /usr/bin/livecd-iso-to-disk $LIVE_ROOT/LiveOS
 fi
+%end
+
+%post
+  yum update -y
 %end
