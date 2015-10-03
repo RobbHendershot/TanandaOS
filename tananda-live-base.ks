@@ -17,8 +17,6 @@ xconfig --startxonboot
 part / --size 8000 --fstype ext4
 services --enabled=NetworkManager --disabled=network,sshd
 
-%include tananda-repo.ks
-
 %packages
 @base-x
 @guest-desktop-agents

@@ -1,10 +1,3 @@
-# Maintained by the Fedora Workstation WG:
-# http://fedoraproject.org/wiki/Workstation
-# mailto:desktop@lists.fedoraproject.org
-
-%include tananda-live-base.ks
-%include tananda-workstation-packages.ks
-
 #part / --size 20000
 
 %post
