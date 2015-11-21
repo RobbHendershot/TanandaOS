@@ -1,0 +1,36 @@
+#!/usr/bin/env python
+
+import npyscreen
+import inspect
+
+class MainForm(npyscreen.FormMuttActiveWithMenus):
+	STATUS_WIDGET_CLASS = npyscreen.FixedText
+	MAIN_WIDGET_CLASS = npyscreen.MultiLineEdit
+	COMMAND_WIDGET_CLASS = npyscreen.TextCommandBox
+
+	def afterEditing(self):
+		self.parentApp.setNextForm(None)
+
+	def create(self):
+
+
+class MyApp(npyscreen.NPSAppManaged):
+    def onStart(self):
+		MAIN = MainForm()
+
+		MAIN.wStatus1.value = " TanandaOS Build Application "
+		MAIN.wStatus1.relx = MAIN.wStatus1.width/2 - len(MAIN.wStatus1.value)/2
+		MAIN.wStatus1.editable = False
+
+		MAIN.wStatus2.value = " Status 2 "
+		MAIN.wStatus2.editable = False
+
+		MAIN.wMain.value = " MAIN "
+		MAIN.wMain.editable = False
+
+		MAIN.wCommand.editable = True
+
+		MAIN.edit()
+
+if __name__ == '__main__':
+    BuildApp = MyApp().run()
