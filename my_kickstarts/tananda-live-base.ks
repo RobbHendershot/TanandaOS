@@ -48,6 +48,10 @@ anaconda
 # Need aajohan-comfortaa-fonts for the SVG rnotes images
 aajohan-comfortaa-fonts
 
+# Requirements to build LiveCD correctly.
+tar
+dracut-live
+
 %end
 
 %post

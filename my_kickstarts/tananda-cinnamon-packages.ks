@@ -10,16 +10,26 @@
 
 @networkmanager-submodules
 @cinnamon-desktop
+@Development Tools
 #@libreoffice
 
-# internet and multimedia
+python-docutils
+python-sphinx
+python-pip
+git
 pidgin
-#hexchat
 transmission
 parole
+transmission
+vim-enhanced
+vim-X11
+livecd-tools
+zsh
+tmux
+openscad
 
 # Branding for the installer
-fedora-productimg-workstation
+#fedora-productimg-workstation
 
 # unlock default keyring. FIXME: Should probably be done in comps
 gnome-keyring-pam
