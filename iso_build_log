@@ -1,0 +1,126 @@
+Using title 'Tananda-23-x86_64-2015-11-21' and product 'Tananda-23-x86_64-2015-11-21'
+Extending sparse file /home/rdhender/workspace/TanandaOS/tmp/imgcreate-cmz3of/tmp-rkLPmJ/ext3fs.img to 4294967296
+Losetup add /dev/loop4 mapping to /home/rdhender/workspace/TanandaOS/tmp/imgcreate-cmz3of/tmp-rkLPmJ/ext3fs.img
+Formating ext3 filesystem on /dev/loop4
+Tuning filesystem on /dev/loop4
+Extending sparse file /home/rdhender/workspace/TanandaOS/tmp/imgcreate-cmz3of/tmp-rkLPmJ/ext3fs.img to 4294967296
+Mounting /dev/loop4 at /home/rdhender/workspace/TanandaOS/tmp/imgcreate-cmz3of/install_root
+Retrieving http://mirrors.fedoraproject.org/metalink?repo=fedora-23&arch=x86_64 ...OK
+Retrieving http://mirrors.fedoraproject.org/metalink?repo=updates-released-f23&arch=x86_64 ...OK
+warning: filesystem-3.2-35.fc23.x86_64: Header V3 RSA/SHA256 Signature, key ID 34ec9cba: NOKEY
+Transaction couldn't start:
+installing package pam_pkcs11-0.6.8-6.fc23.x86_64 needs 2MB on the / filesystem
+installing package passwdqc-1.3.0-5.fc23.x86_64 needs 2MB on the / filesystem
+installing package uboot-tools-2015.07-5.fc23.x86_64 needs 3MB on the / filesystem
+installing package fprintd-pam-0.6.0-3.fc23.x86_64 needs 3MB on the / filesystem
+installing package usbutils-008-4.fc23.x86_64 needs 4MB on the / filesystem
+installing package jwhois-4.0-43.fc23.x86_64 needs 4MB on the / filesystem
+installing package patchutils-0.3.4-3.fc23.x86_64 needs 4MB on the / filesystem
+installing package sudo-1.8.15-1.fc23.x86_64 needs 7MB on the / filesystem
+installing package iptstate-2.2.5-7.fc23.x86_64 needs 7MB on the / filesystem
+installing package linux-atm-2.5.1-13.fc23.x86_64 needs 9MB on the / filesystem
+installing package numactl-2.0.10-3.fc23.x86_64 needs 9MB on the / filesystem
+installing package irqbalance-2:1.0.9-2.fc23.x86_64 needs 9MB on the / filesystem
+installing package shim-0.8-8.x86_64 needs 15MB on the / filesystem
+installing package pam_krb5-2.4.9-5.fc23.x86_64 needs 15MB on the / filesystem
+installing package fpaste-0.3.8.1-1.fc23.noarch needs 16MB on the / filesystem
+installing package pinfo-0.6.10-12.fc23.x86_64 needs 16MB on the / filesystem
+installing package tmux-2.0-2.fc23.x86_64 needs 17MB on the / filesystem
+installing package bash-completion-1:2.1-8.20150513git1950590.fc23.noarch needs 20MB on the / filesystem
+installing package mtr-2:0.85-7.fc23.x86_64 needs 20MB on the / filesystem
+installing package lftp-4.6.1-6.fc23.x86_64 needs 23MB on the / filesystem
+installing package mactel-boot-0.9-12.fc23.x86_64 needs 23MB on the / filesystem
+installing package zsh-5.1.1-2.fc23.x86_64 needs 34MB on the / filesystem
+installing package nmap-ncat-2:6.47-5.fc23.x86_64 needs 34MB on the / filesystem
+installing package ntsysv-1.6-1.fc23.x86_64 needs 34MB on the / filesystem
+installing package rcs-5.9.4-3.fc23.x86_64 needs 35MB on the / filesystem
+installing package nano-2.4.2-2.fc23.x86_64 needs 38MB on the / filesystem
+installing package attr-2.4.47-14.fc23.x86_64 needs 38MB on the / filesystem
+installing package ftp-0.17-69.fc23.x86_64 needs 38MB on the / filesystem
+installing package reiserfs-utils-2:3.6.21-13.fc23.x86_64 needs 39MB on the / filesystem
+installing package ed-1.10-5.fc23.x86_64 needs 39MB on the / filesystem
+installing package time-1.7-48.fc23.x86_64 needs 39MB on the / filesystem
+installing package lohit-gujarati-fonts-2.92.2-4.fc23.noarch needs 40MB on the / filesystem
+installing package google-noto-sans-tai-tham-fonts-20150417-2.fc23.noarch needs 40MB on the / filesystem
+installing package sil-padauk-fonts-2.8-9.fc23.noarch needs 41MB on the / filesystem
+installing package paktype-naskh-basic-fonts-4.1-5.fc23.noarch needs 41MB on the / filesystem
+installing package khmeros-base-fonts-5.0-20.fc23.noarch needs 42MB on the / filesystem
+installing package google-noto-sans-mandaic-fonts-20150417-2.fc23.noarch needs 42MB on the / filesystem
+installing package dejavu-serif-fonts-2.35-2.fc23.noarch needs 45MB on the / filesystem
+installing package naver-nanum-gothic-fonts-3.020-15.20140930.fc23.noarch needs 59MB on the / filesystem
+installing package lohit-kannada-fonts-2.5.3-7.fc23.noarch needs 60MB on the / filesystem
+installing package dejavu-sans-mono-fonts-2.35-2.fc23.noarch needs 61MB on the / filesystem
+installing package adobe-source-han-sans-cn-fonts-1.004-1.fc23.noarch needs 120MB on the / filesystem
+installing package google-noto-sans-tagalog-fonts-20150417-2.fc23.noarch needs 120MB on the / filesystem
+installing package google-noto-sans-lisu-fonts-20150417-2.fc23.noarch needs 120MB on the / filesystem
+installing package traceroute-3:2.0.20-4.fc23.x86_64 needs 120MB on the / filesystem
+installing package vlgothic-fonts-20141206-2.fc23.noarch needs 124MB on the / filesystem
+installing package adobe-source-han-sans-tw-fonts-1.004-1.fc23.noarch needs 164MB on the / filesystem
+installing package sil-nuosu-fonts-2.1.1-10.fc23.noarch needs 165MB on the / filesystem
+installing package sil-abyssinica-fonts-1.200-9.fc23.noarch needs 166MB on the / filesystem
+installing package lohit-odia-fonts-2.91.0-2.fc23.noarch needs 166MB on the / filesystem
+installing package dejavu-sans-fonts-2.35-2.fc23.noarch needs 172MB on the / filesystem
+installing package lohit-tamil-fonts-2.91.1-2.fc23.noarch needs 172MB on the / filesystem
+installing package gnu-free-mono-fonts-20120503-11.fc23.noarch needs 174MB on the / filesystem
+installing package gnu-free-sans-fonts-20120503-11.fc23.noarch needs 177MB on the / filesystem
+installing package google-noto-sans-tai-viet-fonts-20150417-2.fc23.noarch needs 177MB on the / filesystem
+installing package smc-meera-fonts-6.1-5.fc23.noarch needs 177MB on the / filesystem
+installing package tabish-eeyek-fonts-1.0-8.fc23.noarch needs 177MB on the / filesystem
+installing package paratype-pt-sans-fonts-20141121-2.fc23.noarch needs 180MB on the / filesystem
+installing package sil-mingzat-fonts-0.100-4.fc23.noarch needs 180MB on the / filesystem
+installing package stix-fonts-1.1.0-8.fc23.noarch needs 182MB on the / filesystem
+installing package fedora-release-notes-23.02-1.fc23.noarch needs 184MB on the / filesystem
+installing package jomolhari-fonts-0.003-20.fc23.noarch needs 186MB on the / filesystem
+installing package gnu-free-serif-fonts-20120503-11.fc23.noarch needs 192MB on the / filesystem
+installing package thai-scalable-waree-fonts-0.5.0-10.fc23.noarch needs 193MB on the / filesystem
+installing package aajohan-comfortaa-fonts-2.004-5.fc23.noarch needs 193MB on the / filesystem
+installing package google-noto-sans-meetei-mayek-fonts-20150417-2.fc23.noarch needs 193MB on the / filesystem
+installing package lohit-devanagari-fonts-2.95.2-1.fc23.noarch needs 194MB on the / filesystem
+installing package lohit-gurmukhi-fonts-2.91.0-6.fc23.noarch needs 194MB on the / filesystem
+installing package lohit-assamese-fonts-2.91.3-1.fc23.noarch needs 194MB on the / filesystem
+installing package lohit-bengali-fonts-2.91.3-1.fc23.noarch needs 194MB on the / filesystem
+installing package lklug-fonts-0.6-13.20090803cvs.fc23.noarch needs 195MB on the / filesystem
+installing package telnet-1:0.17-61.fc23.x86_64 needs 195MB on the / filesystem
+installing package talk-0.17-49.fc23.x86_64 needs 195MB on the / filesystem
+installing package doxygen-1:1.8.9.1-4.fc23.x86_64 needs 210MB on the / filesystem
+installing package diffstat-1.60-1.fc23.x86_64 needs 210MB on the / filesystem
+installing package rsh-0.17-79.fc23.x86_64 needs 210MB on the / filesystem
+installing package mpage-2.5.6-16.fc23.x86_64 needs 211MB on the / filesystem
+installing package bridge-utils-1.5-12.fc23.x86_64 needs 211MB on the / filesystem
+installing package b43-fwcutter-019-5.fc23.x86_64 needs 211MB on the / filesystem
+installing package symlinks-1.4-12.fc23.x86_64 needs 211MB on the / filesystem
+installing package dos2unix-7.2.3-1.fc23.x86_64 needs 212MB on the / filesystem
+installing package rdist-1:6.1.5-61.fc23.x86_64 needs 212MB on the / filesystem
+installing package tree-1.7.0-5.fc23.x86_64 needs 212MB on the / filesystem
+installing package microcode_ctl-2:2.1-9.1.fc23.x86_64 needs 213MB on the / filesystem
+installing package vconfig-1.9-17.fc23.x86_64 needs 213MB on the / filesystem
+installing package iwl4965-firmware-228.61.2.24-58.fc23.noarch needs 213MB on the / filesystem
+installing package iwl6000g2b-firmware-18.168.6.1-58.fc23.noarch needs 215MB on the / filesystem
+installing package iwl100-firmware-39.31.5.1-58.fc23.noarch needs 215MB on the / filesystem
+installing package iwl2030-firmware-18.168.6.1-58.fc23.noarch needs 216MB on the / filesystem
+installing package iwl6050-firmware-41.28.5.1-58.fc23.noarch needs 217MB on the / filesystem
+installing package atmel-firmware-1.3-14.fc23.noarch needs 218MB on the / filesystem
+installing package iwl7260-firmware-1:25.30.13.0-58.fc23.noarch needs 231MB on the / filesystem
+installing package iwl6000-firmware-9.221.4.1-58.fc23.noarch needs 231MB on the / filesystem
+installing package iwl5150-firmware-8.24.2.2-58.fc23.noarch needs 232MB on the / filesystem
+installing package words-3.0-24.fc23.noarch needs 237MB on the / filesystem
+installing package iwl2000-firmware-18.168.6.1-58.fc23.noarch needs 238MB on the / filesystem
+installing package gnome-backgrounds-3.18.0-1.fc23.noarch needs 253MB on the / filesystem
+installing package ipw2100-firmware-1.3-18.fc23.noarch needs 254MB on the / filesystem
+installing package iwl105-firmware-18.168.6.1-58.fc23.noarch needs 255MB on the / filesystem
+installing package iwl135-firmware-18.168.6.1-58.fc23.noarch needs 256MB on the / filesystem
+installing package iwl1000-firmware-1:39.31.5.1-58.fc23.noarch needs 256MB on the / filesystem
+installing package rootfiles-8.1-18.fc23.noarch needs 257MB on the / filesystem
+installing package man-pages-4.00-5.fc23.noarch needs 274MB on the / filesystem
+installing package libertas-usb8388-firmware-2:20151030-58.git66d3d8d7.fc23.noarch needs 274MB on the / filesystem
+installing package ipw2200-firmware-3.1-11.fc23.noarch needs 275MB on the / filesystem
+installing package zd1211-firmware-1.4-11.fc23.noarch needs 275MB on the / filesystem
+installing package mailcap-2.1.45-1.fc23.noarch needs 275MB on the / filesystem
+installing package iwl6000g2a-firmware-18.168.6.1-58.fc23.noarch needs 276MB on the / filesystem
+installing package iwl3945-firmware-15.32.2.9-58.fc23.noarch needs 276MB on the / filesystem
+installing package iwl5000-firmware-8.83.5.1_1-58.fc23.noarch needs 278MB on the / filesystem
+installing package iwl3160-firmware-1:25.30.13.0-58.fc23.noarch needs 282MB on the / filesystem
+Error creating Live CD : Unable to install: Could not run transaction.
+Unmounting directory /home/rdhender/workspace/TanandaOS/tmp/imgcreate-cmz3of/install_root
+Losetup remove /dev/loop4
+['/sbin/mkfs.ext3', '-F', '-L', '_Tananda-23-x86_64-2015-11-21', '-m', '1', '-b', '4096', '/dev/loop4']

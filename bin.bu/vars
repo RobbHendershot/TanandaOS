@@ -1,0 +1,6 @@
+MASTER_KS_DIR="/usr/share/spin-kickstarts"
+TANANDA_BASE_DIR="$HOME/workspace/TanandaOS"
+TANANDA_KS_DIR="$TANANDA_BASE_DIR/kickstarts"
+KS_RAW_FILE_LIST=( fedora-live-base.ks fedora-live-workstation.ks fedora-repo.ks fedora-workstation-packages.ks )
+KS_MASK_FILE_LIST=($(find $TANANDA_KS_DIR -type f -print | grep -i 'mask'))
+
