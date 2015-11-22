@@ -1,12 +1,14 @@
-%include tananda-live-base.ks
-%include tananda-workstation-packages.ks
+# Maintained by the Fedora Workstation WG:
+# http://fedoraproject.org/wiki/Workstation
+# mailto:desktop@lists.fedoraproject.org
 
-#part / --size 20000
+%include fedora-live-base.ks
+%include fedora-workstation-packages.ks
+%include snippets/packagekit-cached-metadata.ks
+
+part / --size 6144 
 
 %post
-
-# This is a huge file and things work ok without it
-rm -f /usr/share/icons/HighContrast/icon-theme.cache
 
 cat >> /etc/rc.d/init.d/livesys << EOF
 
@@ -39,6 +41,11 @@ FOE
     cp /usr/share/anaconda/gnome/fedora-welcome.desktop /usr/share/applications/
     cp /usr/share/anaconda/gnome/fedora-welcome.desktop ~liveuser/.config/autostart/
   fi
+
+  # Copy Anaconda branding in place
+  if [ -d /usr/share/lorax/product/usr/share/anaconda ]; then
+    cp -a /usr/share/lorax/product/* /
+  fi
 fi
 
 # rebuild schema cache with any overrides we installed
@@ -63,59 +70,3 @@ restorecon -R /home/liveuser/
 EOF
 
 %end
-
-%post
-
-#!/bin/sh
-
-# Sublime Text 3 install with Package Control
-# based on http://simonewebdesign.it/blog/install-sublime-text-3-on-fedora-20/
-
-ST3URL='http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3065_x64.tar.bz2'
-PCURL="https://sublime.wbond.net/Package%20Control.sublime-package"
-
-curl -o ~/st3.tar.bz2 $ST3URL
-if tar -xf ~/st3.tar.bz2 --directory=$HOME; then
-  sudo mv ~/sublime_text_3/ /opt/
-  sudo ln -s /opt/sublime_text_3/sublime_text /bin/subl
-fi
-rm ~/st3.tar.bz2
-
-# Package Control - The Sublime Text Package Manager: https://sublime.wbond.net
-curl -o ~/Package\ Control.sublime-package $PCURL
-sudo mv ~/Package\ Control.sublime-package /opt/sublime_text_3/Packages/
-
-# Add to applications list
-cat << EOF > ~/.local/share/applications/sublime.desktop
-[Desktop Entry]
-Name=Sublime Text
-Exec=subl %F
-MimeType=text/plain;
-Terminal=false
-Type=Application
-Icon=/opt/sublime_text_3/Icon/128x128/sublime-text.png
-Categories=Utility;TextEditor;Development;
-EOF
-
-echo ""
-echo "Sublime Text 3 installed successfully!"
-echo "Run with: subl"
-
-# Install OH-MY-ZSH
-curl -L http://install.ohmyz.sh | sh
-
-%end
-
-%post
-
-cat << EOF > /etc/yum.repos.d/google-chrome.repo
-[google-chrome]
-name=google-chrome - \$basearch
-baseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch
-enabled=1
-gpgcheck=1
-gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
-EOF
-
-%end
-

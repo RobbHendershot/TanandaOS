@@ -1,6 +1,31 @@
-MASTER_KS_DIR="/usr/share/spin-kickstarts"
+#!/bin/sh
+
 TANANDA_BASE_DIR="$HOME/workspace/TanandaOS"
-TANANDA_KS_DIR="$TANANDA_BASE_DIR/kickstarts"
-KS_RAW_FILE_LIST=( fedora-live-base.ks fedora-live-workstation.ks fedora-repo.ks fedora-workstation-packages.ks )
-KS_MASK_FILE_LIST=($(find $TANANDA_KS_DIR -type f -print | grep -i 'mask'))
+TANANDA_KS_DIR="$TANANDA_BASE_DIR/tananda-kickstarts"
+TANANDA_ARCHIVE_DIR="$TANANDA_BASE_DIR/archives"
+MASTER_KS_DIR="$TANANDA_BASE_DIR/spin-kickstarts"
+KS_RAW_FILE_LIST=( fedora-live-base.ks fedora-live-workstation.ks fedora-repo.ks fedora-workstation-packages.ks snippets/packagekit-cached-metadata.ks )
+# KS_MASK_FILE_LIST=($(find $TANANDA_KS_DIR -type f -print | grep -i 'mask'))
+OLD_VERSION_PRESENT="true"
+
+OLD_VERSION=0
+NEW_VERSION=22
+
+###############################################################################
+#  USEFUL FUNCTIONS
+###############################################################################
+header_line="==========================================================="
+section_line="-----------------------------------------------------------"
+
+function header () {
+	printf "\n%s\n" $header_line
+	printf "%s" "$1"
+	printf "\n%s\n" $header_line
+}
+
+function section_heading () {
+	printf "\n%s\n" $section_line
+	printf "%s\n\n" "$1"
+}
+
 

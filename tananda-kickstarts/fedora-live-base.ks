@@ -9,21 +9,20 @@
 
 lang en_US.UTF-8
 keyboard us
-timezone US/Mountain
-auth --useshadow --enablemd5
-selinux --permissive
+timezone US/Eastern
+auth --useshadow --passalgo=sha512
+selinux --enforcing
 firewall --enabled --service=mdns
 xconfig --startxonboot
-#part / --size 8000 --fstype btrfs
-services --enabled=NetworkManager --disabled=network,sshd
+part / --size 4096 --fstype ext4
+services --enabled=NetworkManager,ModemManager --disabled=network,sshd
 
-%include tananda-repo.ks
+%include fedora-repo.ks
 
 %packages
 @base-x
 @guest-desktop-agents
 @standard
-#@fedora-release-nonproduct
 @core
 @fonts
 @input-methods
@@ -48,8 +47,7 @@ anaconda
 # Need aajohan-comfortaa-fonts for the SVG rnotes images
 aajohan-comfortaa-fonts
 
-# Requirements to build LiveCD correctly.
-tar
+# Without this, initramfs generation during live image creation fails: #1242586
 dracut-live
 
 %end
@@ -198,6 +196,9 @@ systemctl --no-reload disable atd.service 2> /dev/null || :
 systemctl stop crond.service 2> /dev/null || :
 systemctl stop atd.service 2> /dev/null || :
 
+# Don't sync the system clock when running live (RHBZ #1018162)
+sed -i 's/rtcsync//' /etc/chrony.conf
+
 # Mark things as configured
 touch /.liveimg-configured
 
@@ -274,6 +275,15 @@ chmod 755 /etc/rc.d/init.d/livesys-late
 # enable tmpfs for /tmp
 systemctl enable tmp.mount
 
+# As livecd-creator is still yum based, we only get yum's yumdb during the
+# image compose. Migrate this over to dnf so that dnf and PackageKit can keep
+# track where packages came from.
+if [ ! -d /var/lib/dnf ]; then
+  mkdir -p /var/lib/dnf
+  mv /var/lib/yum/yumdb /var/lib/dnf/
+  rm -rf /var/lib/yum/
+fi
+
 # make it so that we don't do writing to the overlay for things which
 # are just tmpdirs/caches
 # note https://bugzilla.redhat.com/show_bug.cgi?id=1135475
@@ -303,11 +313,8 @@ rm -f /core*
 # convince readahead not to collect
 # FIXME: for systemd
 
-# forcibly regenerate fontconfig cache (so long as this live image has
-# fontconfig) - see #1169979
-if [ -x /usr/bin/fc-cache ] ; then
-   fc-cache -f
-fi
+echo 'File created by kickstart. See systemd-update-done.service(8).' \
+    | tee /etc/.updated >/var/.updated
 
 %end
 
@@ -320,8 +327,4 @@ if [ "$(uname -i)" = "i386" -o "$(uname -i)" = "x86_64" ]; then
   if [ ! -d $LIVE_ROOT/LiveOS ]; then mkdir -p $LIVE_ROOT/LiveOS ; fi
   cp /usr/bin/livecd-iso-to-disk $LIVE_ROOT/LiveOS
 fi
-%end
-
-%post
-  dnf update -y
 %end
