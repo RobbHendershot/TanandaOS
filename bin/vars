@@ -1,31 +1,17 @@
-#!/bin/sh
+#!/bin/bash
+
+OLD_VERSION=23
+NEW_VERSION=23
 
 TANANDA_BASE_DIR="$HOME/workspace/TanandaOS"
 TANANDA_KS_DIR="$TANANDA_BASE_DIR/tananda-kickstarts"
 TANANDA_ARCHIVE_DIR="$TANANDA_BASE_DIR/archives"
+TANANDA_DOC_DIR="$TANANDA_BASE_DIR/docs"
+TANANDA_BIN_DIR="$TANANDA_BASE_DIR/bin"
 MASTER_KS_DIR="$TANANDA_BASE_DIR/spin-kickstarts"
-KS_RAW_FILE_LIST=( fedora-live-base.ks fedora-live-workstation.ks fedora-repo.ks fedora-workstation-packages.ks snippets/packagekit-cached-metadata.ks )
+
+##### These Variable Are Dynamically Created #####
+# KS_RAW_FILE_LIST=( fedora-live-base.ks fedora-live-workstation.ks fedora-repo.ks fedora-workstation-packages.ks snippets/packagekit-cached-metadata.ks )
 # KS_MASK_FILE_LIST=($(find $TANANDA_KS_DIR -type f -print | grep -i 'mask'))
+DIST_NAME=Tananda$NEW_VERSION-x86_64-`date +"%Y%m%d-%H%M"`
 OLD_VERSION_PRESENT="true"
-
-OLD_VERSION=0
-NEW_VERSION=22
-
-###############################################################################
-#  USEFUL FUNCTIONS
-###############################################################################
-header_line="==========================================================="
-section_line="-----------------------------------------------------------"
-
-function header () {
-	printf "\n%s\n" $header_line
-	printf "%s" "$1"
-	printf "\n%s\n" $header_line
-}
-
-function section_heading () {
-	printf "\n%s\n" $section_line
-	printf "%s\n\n" "$1"
-}
-
-
