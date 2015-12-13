@@ -11,6 +11,7 @@ Tar and archive existing build
 Increment existing files version
 Install fedora-kickstarts package.
 Import new Fedora kickstarts
+	Get from https://git.fedorahosted.org/git/spin-kickstarts.git
 	Copy desired kickstarts to working dir.
 	From /usr/share/spinkickstarts/
 	Workstation

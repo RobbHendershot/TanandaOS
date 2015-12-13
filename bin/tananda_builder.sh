@@ -51,7 +51,7 @@ function make_iso {
 	#   --percentage=0
 	section_heading "Flattening files."
 	cd $TANANDA_KS_DIR
-	ksflatten -c tananda23-live-workstation.ks -o tananda23-final.ks
+	ksflatten -c $TANANDA_KS_DIR/tananda23-live-workstation.ks -o $TANANDA_KS_DIR/tananda23-final.ks
 
 	section_heading "Creating ISO."
 	cd $TANANDA_BASE_DIR
