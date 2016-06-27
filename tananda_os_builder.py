@@ -4,21 +4,22 @@
 
 Usage:
     tananda_os_builder create <fedora_version>
-    tananda_os_builder delete <tananda_version>
+    tananda_os_builder delete <fedora_version>
     tananda_os_builder list
+    tananda_os_builder merge <fedora_version>
     tananda_os_builder -h | --help
     tananda_os_builder -v | --version
 
 Options:
     -h --help         Show this screen.
-    -v --version    Show version.
+    -v --version    Show script version.
 
 '''
 
 from __future__ import unicode_literals, print_function
 from docopt import docopt
 from blessed import Terminal
-from sh import git, curl, cd, mkdir, rm
+from sh import git, curl, cd, mkdir, rm, meld, touch
 from os import path
 
 __version__ = "0.1.0"
@@ -27,6 +28,14 @@ __license__ = "MIT"
 
 term = Terminal()
 base_dir = path.dirname(path.realpath(__file__))
+ks_files = [
+    "live-base.ks",
+    "live-workstation.ks",
+    "repo-rawhide.ks",
+    "repo.ks",
+    "repo-not-rawhide.ks",
+    "snippets/packagekit-cached-metadata.ks"
+]
 
 
 def main(docopt_args):
@@ -35,10 +44,13 @@ def main(docopt_args):
         create(docopt_args["<fedora_version>"])
 
     elif docopt_args["delete"]:
-        delete(docopt_args["<tananda_version>"])
+        delete(docopt_args["<fedora_version>"])
 
     elif docopt_args["list"]:
         list()
+
+    elif docopt_args["merge"]:
+        merge(docopt_args["<fedora_version>"])
 
     else:
         heading1("No usable commands found")
@@ -63,22 +75,25 @@ def create(version_number):
     heading2("Downloading Fedora kickstart files.")
     ks_base = "https://pagure.io/fedora-kickstarts/raw/f" + version_number + "/f"
 
-    ks_files = [
-        "fedora-live-base.ks",
-        "fedora-live-workstation.ks",
-        "fedora-repo-rawhide.ks",
-        "fedora-repo.ks",
-        "fedora-repo-not-rawhide.ks",
-        "snippets/packagekit-cached-metadata.ks"
-    ]
-
     for file in ks_files:
-        file_path = ks_base + "/" + file
+        file_path = ks_base + "/fedora-" + file
 
         print ("Downloading " + file_path)
         curl("-O", file_path)
 
+def merge(version_number):
     # Meld kickstart files together.
+    heading1("Initiating kickstart file comparisons.")
+
+    mkdir("-p", (base_dir + "/final-kickstarts/"))
+    for file in ks_files:
+        fedora_ks = base_dir + "/fedora-kickstarts/fedora-" + file
+        tananda_ks = base_dir + "/tananda-kickstarts/tananda-" + file
+        final_ks = base_dir + "/final-kickstarts/final-" + file
+
+        print(touch(final_ks))
+
+        meld("--auto-merge", fedora_ks, final_ks, tananda_ks)
 
 
 def delete(version_number):

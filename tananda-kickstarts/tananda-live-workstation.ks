@@ -4,7 +4,7 @@
 
 %include tananda23-live-base.ks
 #%include tananda23-workstation-packages.ks
-%include tananda23-packagekit-cached-metadata.ks
+%include snippets/tananda23-packagekit-cached-metadata.ks
 %include tananda23-customizations.ks
 
 #part / --size 6144 

@@ -12,7 +12,7 @@ tananda_os_builder
 ..         :target: https://crate.io/packages/tananda_os_builder?version=latest
 
 
-Builds the "Tananda" spin I created for makers and hackers.
+Builds the "Tananda" Fedora spin I created for makers and hackers.
 
 Features
 --------
