@@ -1,0 +1,556 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"final",
+				"final_ks"
+			],
+			[
+				"fin",
+				"final_ks	statement"
+			],
+			[
+				"ver",
+				"version_number"
+			],
+			[
+				"tan",
+				"tananda_ks	statement"
+			],
+			[
+				"fed",
+				"fedora_ks	statement"
+			],
+			[
+				"ks",
+				"ks_base	statement"
+			],
+			[
+				"he",
+				"heading1	function"
+			],
+			[
+				"file",
+				"file_path	statement"
+			],
+			[
+				"head",
+				"heading2	function"
+			],
+			[
+				"ha",
+				"heading2	function"
+			],
+			[
+				"base",
+				"base_dir	statement"
+			],
+			[
+				"fil",
+				"file_path"
+			],
+			[
+				"version",
+				"version_number	param"
+			],
+			[
+				"doc",
+				"docopt_args	param"
+			],
+			[
+				"work",
+				"workingDir	statement"
+			],
+			[
+				"G",
+				"GIT_REPO	statement"
+			],
+			[
+				"wo",
+				"workingDir	statement"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "=====\nBuild\n=====\n\nDescription\n===========\n\"A Fedora Remix is a combination of Fedora software, with or without third-party software,\nthat any community member can create at any time...\"\n\n\nAutomated Script\n================\n\nRequirements\n------------\n\n* Python 2.7\n* sh\n \n\nInstructions\n============\n\n#. Do a \"git pull\" to bring the project current ::\n    git pull\n#. Create a new branch using \"git branch\" ::\n    git checkout -b <version>\n#. Tar and archive existing build\n#. Increment existing files version\n#. Install fedora-kickstarts package.   \n#. Import new Fedora kickstarts.\n\n    * Copy desired kickstarts to working dir.\n    * From /usr/share/spinkickstarts/\n    * Workstation\n\n#. If no existing Tananda build files create them.\n#. Rebranding in %post section:\n\n    .. code:: sh \n\n        sed -i -e ‘s/Generic release/LFY Fedora Remix/g’ /etc/fedora-release /etc/issue\n\n#. Meld Tananda and Fedora kickstarts\n#. ksflatten to create new Tananda Master kickstart.\n#. Commit to git\n#. Install livecd-tools package.\n#. Create iso\n#. Test iso\n#. Burn iso\n\n\nFiles\n=====\n---------------------\nFinal build files\n---------------------\n\n* tananda-final-build.ks\n\n\n-----------------------------\nCopy Files From KS to Install\n-----------------------------\nFrom http://forums.fedoraforum.org/showthread.php?t=280146 -\n\n#. $INSTALL_ROOT is the ks directory.\n#. In the ``%post --nochroot`` section:\n\n    .. code:: sh\n\n       # Copy somefile to livecd default users home dir\n       cp somefile $INSTALL_ROOT/destination/\n\n\n=============\nSystem Config\n=============\nSudo\n====\nUpdate sudo to remove password request.\n\n#. As root:\n\n    .. code:: sh\n\n        cat << EOF > /etc/sudoers.d/wheel\n        ## Allows people in group wheel to run all commands\n        #%wheel ALL=(ALL)       ALL\n\n        ## Same thing without a password\n        %wheel  ALL=(ALL)       NOPASSWD: ALL\n        EOF\n\n#. Exit and restart terminal.\n\n\nlibcurl\n=======\n\n.. code:: shell\n\n    sudo dnf install -y libcurl-devel\n\n\navahi-daemon\n============\n\n.. code:: shell\n\n    sudo dnf install -y avahi-dnsconfd\n\npv\n==\n\n.. code:: shell\n\n    sudo dnf install -y pv\n\nGnome\n=====\n\n.. code:: shell\n\n    sudo dnf install -y gnome-tweak-tool\n\n\nFonts\n=====\n----------\nInstalling\n----------\nFrom https://ask.fedoraproject.org/en/question/7032/how-do-i-install-fonts-in-fedora/ -\n\n#. Copy font to ``/usr/share/fonts``.\n#. Update the font cache by running:\n\n    .. code:: \n\n        sudo fc-cache -v\n\n------------------\nSubpixel Rendering\n------------------\nFrom http://peter.kingofcoders.com/?p=177 -\n\n#. Install rpm fusion repos using one of the following:\n\n    .. code:: sh\n\n        sudo dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm\n\n\n    .. code:: sh\n\n        sudo dnf install http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm\n\n#. Install the freetype-freeworld package.\n\n    .. code:: sh\n\n        sudo dnf install -y freetype-freeworld\n\n#. Adjust the hinting style and enable RGB anti-aliasing.\n\n    .. code:: sh\n\n        gsettings \"set\" \"org.gnome.settings-daemon.plugins.xsettings\" \"hinting\" \"slight\"\n        gsettings \"set\" \"org.gnome.settings-daemon.plugins.xsettings\" \"antialiasing\" \"rgba\"\n\n#. Activate the lcddefault lcdfilter.\n\n    .. code:: sh\n\n        echo \"Xft.lcdfilter: lcddefault\" > ~/.Xresources\n\n#. Reboot.\n\n\nDesktop Background\n==================\nPer https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Desktop_Migration_and_Administration_Guide/customize-desktop-backgrounds.html -\n\n#. Copy image into place.\n#. Create a local database for machine-wide settings in ``/etc/dconf/db/local.d/00-background``:\n\n    .. code:: sh\n\n        # Specify the dconf path\n        [org/gnome/desktop/background]\n\n        # Specify the path to the desktop background image file\n        picture-uri='file:///usr/local/share/backgrounds/wallpaper.jpg'\n        # Specify one of the rendering options for the background image:\n        # 'none', 'wallpaper', 'centered', 'scaled', 'stretched', 'zoom', 'spanned'\n        picture-options='scaled'\n        # Specify the left or top color when drawing gradients or the solid color\n        primary-color='000000'\n        # Specify the right or bottom color when drawing gradients\n        secondary-color='FFFFFF'\n\n#. Update the system databases:\n\n.. code:: sh\n\n    dconf update\n\n\nSet Screen Shield\n=================\nPer https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Desktop_Migration_and_Administration_Guide/customize-desktop-backgrounds.html -\n\n#. Create a gdm database for machine-wide settings in ``/etc/dconf/db/gdm.d/01-corp-login``:\n\n    .. code:: sh\n\n        [org/gnome/desktop/background]\n        picture-uri='file:///opt/corp/background.jpg'\n\n#. Update the system databases:\n\n    .. code:: sh\n\n        dconf update\n\n\nRedshift\n========\n.. code:: sh\n\n    sudo dnf install redshift -y\n\nAdd $HOME/.config/autostart/redshift.desktop\n\n.. code:: sh\n\n    [Desktop Entry]\n    Name=Redshift\n    Comment=Color temperature adjustment tool\n    Exec=/usr/bin/redshift -c $HOME/.config/redshift.conf\n    Terminal=false\n    Type=Application\n    StartupNotify=false\n\nAdd $HOME/.config/redshift.conf::\n\n    [redshift]\n    temp-day=5700\n    temp-night=3500\n    transition=1\n    gamma=0.8\n    location-provider=manual\n    adjustment-method=randr\n\n    [manual]\n    lat=39.802765\n    lon=-105.087486\n\n    [vidmode]\n    screen=0\n\n    [randr]\n    screen=0\n\n\n====\nApps\n====\nVIM\n===\n\n.. code:: sh\n\n    sudo dnf install -y vim\n\n\nChrome\n======\nPer http://www.if-not-true-then-false.com/2010/install-google-chrome-with-yum-on-fedora-red-hat-rhel/\n\n#. Change to root user.\n#. Enable Google YUM repository:\n\n    .. code:: sh\n\n        cat << EOF > /etc/yum.repos.d/google-chrome.repo\n        [google-chrome]\n        name=google-chrome - \\$basearch\n        baseurl=http://dl.google.com/linux/chrome/rpm/stable/\\$basearch\n        enabled=1\n        gpgcheck=1\n        gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub\n        EOF\n\n#. Install Google Chrome with DNF\n\n    .. code:: sh\n\n        dnf install -y google-chrome-stable\n\n\nPowertop\n========\n#. Laptop power management.\n\n    .. code:: sh\n\n        sudo dnf install -y powertop\n        sudo systemctl start powertop.service\n        sudo systemctl enable powertop.service\n\n\nTLP?\n====\n#. Laptop power management.\n\n    .. code:: sh\n\n        sudo dnf install -y tlp\n        sudo dnf install -y tlp-rdw\n        sudo systemctl mask systemd-rfkill@.service\n\nNote for F23: you may safely ignore the message \"Failed to execute operation: Unit name systemd-rfkill@.service is not valid\". The service is masked nonetheless.\n\n-------------\nThinkpad Only\n-------------\n\n.. code:: sh\n\n    sudo dnf install -y --nogpgcheck http://repo.linrunner.de/fedora/tlp/repos/releases/tlp-release-1.0-0.noarch.rpm\n    sudo dnf install -y --nogpgcheck http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm\n    sudo dnf install -y --nogpgcheck akmod-tp_smapi akmod-acpi_call kernel-devel\n\n\nfedy?\n=====\n\n#. Install with\n   \n    .. code:: sh\n\n        sudo curl http://folkswithhats.org/fedy-installer -o fedy-installer && chmod +x fedy-installer && ./fedy-installer\n\n#. Currently there is no cli so you will have to install the following by hand.\n\n\n----\nApps\n----\n\n* Archive Formats\n* Google Chrome (if not installed manually)\n* Steam\n* Sublime Text 3 (if not installed manually)\n\n\n------\nTweaks\n------\n\n* Better Font Rendering\n* Disk I/O Scheduler\n\n--------\nPackages\n--------\n\n* Package Control\n* Restructured​Text Improved\n* Git\n* GitGutter\n* Emmet\n* All Autocomplete\n* Terminal\n* Pretty JSON\n\n\n===============\nPersonal Config \n===============\ntmux\n====\n\n.. code:: sh\n\n    sudo dnf install -y tmux\n   \n\ntmuxifier\n=========\nPer https://github.com/jimeh/tmuxifier\n\n.. code:: sh\n\n    cd ~/\n    git clone https://github.com/jimeh/tmuxifier.git ~/.tmuxifier\n    export PATH=\"$HOME/.tmuxifier/bin:$PATH\"\n\n\nzsh\n===\n\n.. code:: sh\n\n    sudo dnf install -y zsh\n    chsh -s /bin/zsh\n\n\nAntigen\n=======\nhttps://github.com/zsh-users/antigen\n\n.. code:: sh\n\n    git clone https://github.com/zsh-users/antigen.git\n\n\nHomeshick\n=========\nhttps://github.com/andsens/homeshick\n\n.. code:: sh\n\n    git clone git://github.com/andsens/homeshick.git $HOME/.homesick/repos/homeshick\n    printf '\\nsource \"$HOME/.homesick/repos/homeshick/homeshick.sh\"' >> $HOME/.bashrc\n    source .bashrc\n    $HOME/.homesick/repos/homeshick/bin/homeshick clone https://bitbucket.org/RobbHendershot/dotfiles\n\n\nRedshift\n========\n\n.. code:: sh\n\n    sudo dnf install -y redshift \n\n\nGnome Extensions\n================\nFirst add GNOME Shell Integration extension to Chrome.\n\n* Applications Menu\n* Caffeine\n* Places Status Indicator\n* Removable Drive Menu\n* Suspend Button\n* User Themes\n* Window List\n\n\nMisc Dev Tools\n==============\n\n.. code:: sh\n\n    sudo dnf install -y gcc\n    sudo dnf install -y redhat-rpm-config \n    sudo dnf install -y python-devel\n\n\nCookiecutter\n============\n\n.. code:: sh\n\n    pip install cookiecutter --user\n\n\nvirtualenvwrapper\n=================\n\n.. code:: sh\n\n    pip install virtualenvwrapper --user\n\n* Add ``source /usr/local/bin/virtualenvwrapper.sh`` to shell start script (.zshrc).\n\n\nSublime Text 3\n==============\nSee Sublime Installer in these notes.\n\n#. ``install-sublime-text.sh``\n\n\nUsing Dev Env\n=============\nhttp://webcache.googleusercontent.com/search?q=cache:u9ydVynKZUAJ:tjelvarolsson.com/blog/begginers-guide-creating-clean-python-development-environments/+&cd=6&hl=en&ct=clnk&gl=us\n\n* Generate a new Python project template.\n\n.. code:: sh\n\n    $ cookiecutter gh:tjelvar-olsson/cookiecutter-pypackage\n    ...\n    repo_name (default is \"mypackage\")? awesome\n    ...\n    $ cd awesome\n\n* Create a virtual environment for the project.\n\n.. code:: sh\n\n    $ virtualenv ~/virtualenvs/awesome\n\n* Activate the virtual environment and use setuptools to create a development environment.\n\n.. code:: sh\n\n    $ source ~/virtualenvs/awesome/bin/activate\n    (awesome)$ python setup.py develop\n\n* Run the tests!\n\n.. code:: sh\n\n    (awesome)$ python tests/tests.py\n    ..\n    ----------------------------------------------------------------------\n    Ran 2 tests in 0.000s\n\n    OK\n\n\n==========\nReferences\n==========\n\n* Remix home page - https://fedoraproject.org/wiki/Remix\n* Good how to - http://opensourceforu.efytimes.com/2010/01/roll-out-a-fedora-remix/\n* Sugar Labs (specific to F23) - http://wiki.sugarlabs.org/go/Fedora_23\n* Excellent Sugar Labs step by step - https://wiki.sugarlabs.org/go/Build_Your_Own_Remix_with_Fedora\n\n\n=======\nScripts\n=======\n\nSublime Installer\n=================\n\n.. code:: sh\n\n    #!/bin/sh\n\n    # Sublime Text 3 install with Package Control\n    # based on http://simonewebdesign.it/blog/install-sublime-text-3-on-fedora-20/\n\n    BASEDIR='/usr/local'\n    TMPDIR='/tmp'\n    ST3URL=\"https://download.sublimetext.com/sublime_text_3_build_3103_x64.tar.bz2\"\n    CONFIGDIR=\"$HOME/.config/sublime-text-3\"\n    PCDIR=\"$CONFIGDIR/Installed Packages\"\n    USER=`whoami`\n\n    install_sublime () {\n        printf \"\\n============================================\\n\"\n        printf \"| Installing Sublime Text 3\\n\"\n        printf \"\\n\"\n        \n        printf \"Downloading Sublime Text 3...\\n\"\n        curl -o $TMPDIR/st3.tar.bz2 $ST3URL\n\n        printf \"Installing Sublime Text 3...\\n\"\n        if [ -e $TMPDIR/st3.tar.bz2 ]; then\n            sudo tar -xjf $TMPDIR/st3.tar.bz2 -C $BASEDIR/\n            sudo ln -s $BASEDIR/sublime_text_3/sublime_text $BASEDIR/bin/subl\n        else\n            exit \"Could not install Sublime Text...\"\n            \n        fi\n\n        printf \"Cleaning Up...\\n\"\n        sudo rm $TMPDIR/st3.tar.bz2\n    }\n\n    install_pc () {\n        printf \"\\n============================================\\n\"\n            printf \"| Installing Packages\\n\"\n            printf \"\\n\"\n\n        # Package Control - The Sublime Text Package Manager: https://sublime.wbond.net\n        printf \"Installing packages...\\n\"\n\n        mkdir -p \"$PCDIR\"\n        cd \"$PCDIR\"\n\n        # curl -O \"https://sublime.wbond.net/Package Control.sublime-package\"\n        # curl -O \"https://packagecontrol.io/packages/RestructuredText Improved.sublime-package\"\n        # curl -O \"https://packagecontrol.io/packages/Git.sublime-package\"\n        # curl -O \"https://packagecontrol.io/packages/GitGutter.sublime-package\"\n        # curl -O \"https://packagecontrol.io/packages/Terminal.sublime-package\"\n\n\n        sudo chown $USER:$USER -R \"$CONFIGDIR\"\n        #sudo mv $TMPDIR/Package\\ Control.sublime-package $BASEDIR/sublime_text_3/Packages/\n    }\n\n    add_to_menu () {\n            printf \"\\n============================================\\n\"\n            printf \"| Add To Desktop Menu\\n\"\n            printf \"\\n\"\n\n        # Add to applications list\n        printf \"Adding to desktop menu...\\n\"\n        cat << EOF > ~/.local/share/applications/sublime.desktop\n    [Desktop Entry]\n    Name=Sublime Text\n    Exec=subl %F\n    MimeType=text/plain;\n    Terminal=false\n    Type=Application\n    Icon=$BASEDIR/sublime_text_3/Icon/128x128/sublime-text.png\n    Categories=Utility;TextEditor;Development;\n    EOF\n\n        printf \"Run with: subl\\n\"\n\n    }\n\n    clear \n    printf \"\\n\"\n    printf \" =========================== \\n\"\n    printf \"| Installing Sublime Text 3 |\\n\"\n    printf \" =========================== \\n\"\n    printf \"\\n\"\n\n    install_sublime\n    install_pc\n    add_to_menu\n\n\n",
+			"file": "/home/rdhender/workspace/TanandaOS/docs/notes.rst",
+			"file_size": 13405,
+			"file_write_time": 131110565972681689,
+			"settings":
+			{
+				"buffer_size": 13536,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bin/tananda_builder.sh",
+			"settings":
+			{
+				"buffer_size": 3037,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bin/make_iso.sh",
+			"settings":
+			{
+				"buffer_size": 345,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n'''tananda_os_builder\n\nUsage:\n    tananda_os_builder create <fedora_version>\n    tananda_os_builder delete <fedora_version>\n    tananda_os_builder list\n    tananda_os_builder merge <fedora_version>\n    tananda_os_builder -h | --help\n    tananda_os_builder -v | --version\n\nOptions:\n    -h --help         Show this screen.\n    -v --version    Show script version.\n\n'''\n\nfrom __future__ import unicode_literals, print_function\nfrom docopt import docopt\nfrom blessed import Terminal\nfrom sh import git, curl, cd, mkdir, rm, meld, touch\nfrom os import path\n\n__version__ = \"0.1.0\"\n__author__ = \"Robb Hendershot\"\n__license__ = \"MIT\"\n\nterm = Terminal()\nbase_dir = path.dirname(path.realpath(__file__))\nks_files = [\n    \"live-base.ks\",\n    \"live-workstation.ks\",\n    \"repo-rawhide.ks\",\n    \"repo.ks\",\n    \"repo-not-rawhide.ks\",\n    \"snippets/packagekit-cached-metadata.ks\"\n]\n\n\ndef main(docopt_args):\n\n    if docopt_args[\"create\"]:\n        create(docopt_args[\"<fedora_version>\"])\n\n    elif docopt_args[\"delete\"]:\n        delete(docopt_args[\"<fedora_version>\"])\n\n    elif docopt_args[\"list\"]:\n        list()\n\n    elif docopt_args[\"merge\"]:\n        merge(docopt_args[\"<fedora_version>\"])\n\n    else:\n        heading1(\"No usable commands found\")\n\n\ndef create(version_number):\n    heading1(\"Creating new version based on Fedora \" + version_number + \"\\n\")\n\n    # Update git and create new version.\n    heading2(\"Updating master branch.\")\n    print(git.checkout(\"master\"))\n    print(git.pull())  # Bring branch current.\n\n    heading2(\"Creating new branch\")\n    print(git.checkout(\"-b\" + version_number))  # Create working branch.\n\n    # Get kickstart files.\n    heading2(\"Creating fedora-kickstarts directory\\n\")\n    mkdir(\"-p\", (base_dir + \"/fedora-kickstarts/\"))\n    cd(base_dir + \"/fedora-kickstarts/\")\n\n    heading2(\"Downloading Fedora kickstart files.\")\n    ks_base = \"https://pagure.io/fedora-kickstarts/raw/f\" \\\n              + version_number + \"/f\"\n\n    for file in ks_files:\n        file_path = ks_base + \"/fedora-\" + file\n\n        print (\"Downloading \" + file_path)\n        curl(\"-O\", file_path)\n\n\ndef merge(version_number):\n    # Meld kickstart files together.\n    heading1(\"Initiating kickstart file comparisons.\")\n\n    mkdir(\"-p\", (base_dir + \"/final-kickstarts/\"))\n    for file in ks_files:\n        fedora_ks = base_dir + \"/fedora-kickstarts/fedora-\" + file\n        tananda_ks = base_dir + \"/tananda-kickstarts/tananda-\" + file\n        final_ks = base_dir + \"/final-kickstarts/final-\" + file\n\n        print(touch(final_ks))\n\n        meld(\"--auto-merge\", fedora_ks, final_ks, tananda_ks)\n\n\ndef delete(version_number):\n    heading1(\"Deleting version \" + version_number + \"\\n\")\n    cd(base_dir)\n\n    heading2(\"Removing branch from git.\")\n    print(git.checkout(\"master\"))\n    print(git.branch(\"-D\", version_number))\n\n    heading2(\"Deleting files.\")\n    print(rm(\"-rf\", base_dir + \"/fedora-kickstarts\"))\n\n\ndef delete(version_number):\n    heading1(\"Writing version \" + version_number + \"iso image.\")\n\n    livecd_creator(config=final_ks,\n        fslabel=$DIST_NAME,\n        releasever=version_number,\n        title=$DIST_NAME,\n        product=$DIST_NAME,\n        cache=$BASE_DIR + \"/cache/\",\n        tmpdir=$BASE_DIR + \"/tmp/\",\n        verbose=true)\n\ndef list():\n    heading1(\"Current versions\")\n    print (git.branch(\"--list\"))\n\n    print(path.dirname(path.realpath(__file__)))\n\n\ndef heading1(text):\n    text.upper()\n\n    print(term.bold + (\"=\" * 70))\n    print(term.bold + text.upper() + term.normal + \"\\n\")\n\n\ndef heading2(text):\n    print(term.bold_underline + text + term.normal)\n\n\nif __name__ == '__main__':\n    args = docopt(__doc__, version=__version__)\n    main(args)\n",
+			"file": "tananda_os_builder.py",
+			"file_size": 3741,
+			"file_write_time": 131119026558013263,
+			"settings":
+			{
+				"buffer_size": 3713,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "{\n    \"auto_complete_triggers\": [{\"selector\": \"source.python - string - comment\n    - constant.numeric\", \"characters\": \".\"}]\n	\"complete_all_parameters\": true\n}",
+			"file": "/home/rdhender/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+			"file_size": 159,
+			"file_write_time": 131119117991982998,
+			"settings":
+			{
+				"buffer_size": 159,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tananda_os_builder.sublime-project",
+			"settings":
+			{
+				"buffer_size": 362,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 372.0,
+		"last_filter": "package control:",
+		"selected_items":
+		[
+			[
+				"package control:",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"remove pa",
+				"Package Control: Remove Package"
+			],
+			[
+				"list pac",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: List Packages"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/rdhender/workspace/tananda_os_builder"
+	],
+	"file_history":
+	[
+		"/home/rdhender/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/home/rdhender/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/rdhender/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/rdhender/.bashrc",
+		"/home/rdhender/workspace/TanandaOS/bin/create_tanandaos.py",
+		"/home/rdhender/.config/sublime-text-3/Packages/User/Python.sublime-settings",
+		"/home/rdhender/workspace/tananda_os_builder/setup.py",
+		"/home/rdhender/workspace/tananda_os_builder/README.rst",
+		"/home/rdhender/workspace/TanandaOS/bin/build_spin.sh",
+		"/home/rdhender/workspace/TanandaOS/bin/tananda_build/tananda_build/__init__.py",
+		"/home/rdhender/workspace/TanandaOS/bin/tananda_build/tananda_build/tananda_build.py",
+		"/home/rdhender/workspace/TanandaOS/bin/tananda_build/setup.py",
+		"/home/rdhender/workspace/TanandaOS/bin/tananda_build/setup.cfg",
+		"/home/rdhender/workspace/TanandaOS/bin/tananda_build/README.rst"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sudo",
+			"tananda_version",
+			"__term__",
+			"term.",
+			"term ",
+			" term ",
+			"  ",
+			"..",
+			"docopt"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"fedora_version",
+			"term",
+			"__term__.",
+			"__term__ ",
+			"    ",
+			"...."
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/rdhender/workspace/TanandaOS/docs/notes.rst",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13536,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1941,
+								1941
+							]
+						],
+						"settings":
+						{
+							"spell_check": true,
+							"syntax": "Packages/RestructuredText/reStructuredText.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 330.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "bin/tananda_builder.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3037,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1440.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bin/make_iso.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 345,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								94,
+								94
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "tananda_os_builder.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3713,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2134,
+								2134
+							]
+						],
+						"settings":
+						{
+							"spell_check": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 840.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/rdhender/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 159,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								159,
+								159
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "tananda_os_builder.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 362,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								362,
+								362
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.581259150805,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 157.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "tananda_os_builder.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
