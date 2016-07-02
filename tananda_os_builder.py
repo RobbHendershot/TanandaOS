@@ -7,6 +7,7 @@ Usage:
     tananda_os_builder delete <fedora_version>
     tananda_os_builder list
     tananda_os_builder merge <fedora_version>
+    tananda_os_builder build <fedora_version>    
     tananda_os_builder -h | --help
     tananda_os_builder -v | --version
 
@@ -28,6 +29,7 @@ __license__ = "MIT"
 
 term = Terminal()
 base_dir = path.dirname(path.realpath(__file__))
+dist_name = "Tananda"
 ks_files = [
     "live-base.ks",
     "live-workstation.ks",
@@ -52,6 +54,9 @@ def main(docopt_args):
     elif docopt_args["merge"]:
         merge(docopt_args["<fedora_version>"])
 
+    elif docopt_args["build"]:
+        build(docopt_args["<fedora_version>"])
+
     else:
         heading1("No usable commands found")
 
@@ -73,13 +78,15 @@ def create(version_number):
     cd(base_dir + "/fedora-kickstarts/")
 
     heading2("Downloading Fedora kickstart files.")
-    ks_base = "https://pagure.io/fedora-kickstarts/raw/f" + version_number + "/f"
+    ks_base = "https://pagure.io/fedora-kickstarts/raw/f" \
+              + version_number + "/f"
 
     for file in ks_files:
         file_path = ks_base + "/fedora-" + file
 
         print ("Downloading " + file_path)
         curl("-O", file_path)
+
 
 def merge(version_number):
     # Meld kickstart files together.
@@ -107,6 +114,23 @@ def delete(version_number):
     heading2("Deleting files.")
     print(rm("-rf", base_dir + "/fedora-kickstarts"))
 
+
+def build(version_number):
+    heading1("Writing version " + version_number + "ISO image.")
+
+    heading2("Building ISO")
+    sudo.livecd_creator(config=final_ks,
+        fslabel=dist_name,
+        releasever=version_number,
+        title=dist_name,
+        product=dist_name,
+        cache=base_dir + "/cache/",
+        tmpdir=base_dir + "/tmp/",
+        verbose=true)
+
+    heading2("Setting permissions on ISO")
+    sudo.chown("rdhender:rdhender", base_dir + "/*.iso")
+    sudo.chmod("775", "-R", base_dir + "/*.iso")
 
 def list():
     heading1("Current versions")
