@@ -7,7 +7,7 @@ Usage:
     tananda_os_builder delete <fedora_version>
     tananda_os_builder list
     tananda_os_builder merge <fedora_version>
-    tananda_os_builder build <fedora_version>    
+    tananda_os_builder build <fedora_version>
     tananda_os_builder -h | --help
     tananda_os_builder -v | --version
 
@@ -110,6 +110,7 @@ def delete(version_number):
     heading2("Removing branch from git.")
     print(git.checkout("master"))
     print(git.branch("-D", version_number))
+    print(git.remote("prune", "origin"))
 
     heading2("Deleting files.")
     print(rm("-rf", base_dir + "/fedora-kickstarts"))
@@ -119,14 +120,14 @@ def build(version_number):
     heading1("Writing version " + version_number + "ISO image.")
 
     heading2("Building ISO")
-    sudo.livecd_creator(config=final_ks,
+    print(sudo.livecd_creator(config=final_ks,
         fslabel=dist_name,
         releasever=version_number,
         title=dist_name,
         product=dist_name,
         cache=base_dir + "/cache/",
         tmpdir=base_dir + "/tmp/",
-        verbose=true)
+        verbose=true))
 
     heading2("Setting permissions on ISO")
     sudo.chown("rdhender:rdhender", base_dir + "/*.iso")
