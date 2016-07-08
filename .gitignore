@@ -90,6 +90,5 @@ ENV/
 
 *.iso
 spin-kickstarts/
-final-kickstarts/
 fedora-*.ks
 packagekit-cached-metadata.ks

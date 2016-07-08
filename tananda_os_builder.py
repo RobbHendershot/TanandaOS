@@ -120,7 +120,7 @@ def build(version_number):
     heading1("Writing version " + version_number + "ISO image.")
 
     heading2("Building ISO")
-    print(sudo.livecd_creator(config=final_ks,
+    print("livecd_creator"(config=final_ks,
         fslabel=dist_name,
         releasever=version_number,
         title=dist_name,
@@ -130,8 +130,8 @@ def build(version_number):
         verbose=true))
 
     heading2("Setting permissions on ISO")
-    sudo.chown("rdhender:rdhender", base_dir + "/*.iso")
-    sudo.chmod("775", "-R", base_dir + "/*.iso")
+    print(chown("rdhender:rdhender", base_dir + "/*.iso"))
+    print(chmod("775", "-R", base_dir + "/*.iso"))
 
 def list():
     heading1("Current versions")
