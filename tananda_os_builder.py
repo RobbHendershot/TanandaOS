@@ -81,11 +81,11 @@ def create(version_number):
     ks_base = "https://pagure.io/fedora-kickstarts/raw/f" \
               + version_number + "/f"
 
-    for file in ks_files:
-        file_path = ks_base + "/fedora-" + file
+    # for file in ks_files:
+    #     file_path = ks_base + "/fedora-" + file
 
-        print ("Downloading " + file_path)
-        curl("-O", file_path)
+    #     print ("Downloading " + file_path)
+    #     curl("-O", file_path)
 
 
 def merge(version_number):
@@ -93,14 +93,19 @@ def merge(version_number):
     heading1("Initiating kickstart file comparisons.")
 
     mkdir("-p", (base_dir + "/final-kickstarts/"))
-    for file in ks_files:
-        fedora_ks = base_dir + "/fedora-kickstarts/fedora-" + file
-        tananda_ks = base_dir + "/tananda-kickstarts/tananda-" + file
-        final_ks = base_dir + "/final-kickstarts/final-" + file
+    # for file in ks_files:
+    #     fedora_ks = base_dir + "/fedora-kickstarts/fedora-" + file
+    #     tananda_ks = base_dir + "/tananda-kickstarts/tananda-" + file
+    #     final_ks = base_dir + "/final-kickstarts/final-" + file
 
-        print(touch(final_ks))
+    #     print(touch(final_ks))
 
-        meld("--auto-merge", fedora_ks, final_ks, tananda_ks)
+    #     meld("--auto-merge", fedora_ks, final_ks, tananda_ks)
+
+    fedora_ks = base_dir + "/fedora-kickstarts/"
+    tananda_ks = base_dir + "/tananda-kickstarts/"
+
+    meld("--auto-compare", "--diff", fedora_ks, tananda_ks)
 
 
 def delete(version_number):
