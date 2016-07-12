@@ -81,11 +81,11 @@ def create(version_number):
     ks_base = "https://pagure.io/fedora-kickstarts/raw/f" \
               + version_number + "/f"
 
-    # for file in ks_files:
-    #     file_path = ks_base + "/fedora-" + file
+    for file in ks_files:
+        file_path = ks_base + "/fedora-" + file
 
-    #     print ("Downloading " + file_path)
-    #     curl("-O", file_path)
+        print ("Downloading " + file_path)
+        curl("-O", file_path)
 
 
 def merge(version_number):
